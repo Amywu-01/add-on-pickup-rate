@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add-on 各點位紀錄</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: auto;
+        }
+
+        .section {
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+        }
+
+        .section h3 {
+            margin: 0 0 10px;
+        }
+
+        .section input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            font-size: 1rem;
+        }
+
+        .counter {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .counter button {
+            width: 40px;
+            height: 40px;
+            font-size: 1.2rem;
+            border-radius: 50%;
+            border: none;
+            background-color: #007bff;
+            color: white;
+            cursor: pointer;
+        }
+
+        .counter span {
+            font-size: 1.2rem;
+        }
+
+        .section:nth-child(odd) {
+            background-color: #f0f8ff;
+        }
+
+        .section:nth-child(even) {
+            background-color: #fff8dc;
+        }
+
+        .export-btn {
+            width: 100%;
+            padding: 10px;
+            font-size: 1.2rem;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .export-btn:hover {
+    background-color: #218838;
+}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Add-on 各點位紀錄</h1>
+        <p>日期: <span id="currentDate"></span>，星期 <span id="currentDay"></span>，第 <span id="currentWeek"></span> 週</p>
+        <p>填表人: <input type="text" id="filledBy" placeholder="輸入您的名字"></p>
+        
+        <!-- 位置1 -->
+        <div class="section">
+            <h3>4F Launch area</h3>
+            <div class="counter">
+                <span>紀錄時間:</span>
+                <input type="time" id="time1">
+            </div>
+            <div class="counter">
+                <span>來訪人數:</span>
+                <button onclick="decrease('visitors1')">-</button>
+                <span id="visitors1">0</span>
+                <button onclick="increase('visitors1')">+</button>
+            </div>
+            <div class="counter">
+                <span>Touch rate(碰):</span>
+                <button onclick="decrease('touch1')">-</button>
+                <span id="touch1">0</span>
+                <button onclick="increase('touch1')">+</button>
+            </div>
+            <div class="counter">
+                <span>Pick-up rate(取):</span>
+                <button onclick="decrease('take1')">-</button>
+                <span id="take1">0</span>
+                <button onclick="increase('take1')">+</button>
+            </div>
+        </div>
+
+        <!-- 位置2 -->
+        <div class="section">
+            <h3>4F OTW</h3>
+            <div class="counter">
+                <span>紀錄時間:</span>
+                <input type="time" id="time2">
+            </div>
+            <div class="counter">
+                <span>Touch rate(碰):</span>
+                <button onclick="decrease('touch2')">-</button>
+                <span id="touch2">0</span>
+                <button onclick="increase('touch2')">+</button>
+            </div>
+            <div class="counter">
+                <span>Pick-up rate(取):</span>
+                <button onclick="decrease('take2')">-</button>
+                <span id="take2">0</span>
+                <button onclick="increase('take2')">+</button>
+            </div>
+            <div class="counter">
+                <span>客人動向:</span>
+                <span>左(LA)</span>
+                <button onclick="decrease('directionLeft')">-</button>
+                <span id="directionLeft">0</span>
+                <button onclick="increase('directionLeft')">+</button>
+                <span>右(SR)</span>
+                <button onclick="decrease('directionRight')">-</button>
+                <span id="directionRight">0</span>
+                <button onclick="increase('directionRight')">+</button>
+            </div>
+            <div class="counter">
+                <span>動向加總:</span>
+                <span id="directionTotal">0</span>
+            </div>
+            <div class="counter">
+                <span>拿了商品後有拿黃袋:</span>
+                <button onclick="decrease('yellowBag2')">-</button>
+                <span id="yellowBag2">0</span>
+                <button onclick="increase('yellowBag2')">+</button>
+            </div>
+            <div class="counter">
+                <span>走右邊的客人有進入展示間:</span>
+                <button onclick="decrease('showroom2')">-</button>
+                <span id="showroom2">0</span>
+                <button onclick="increase('showroom2')">+</button>
+            </div>
+        </div>
+
+<!-- 位置3 -->
+<div class="section">
+    <h3>3F OTW</h3>
+    <div class="counter">
+        <span>紀錄時間:</span>
+        <input type="time" id="time3">
+    </div>
+    <div class="counter">
+        <span>來訪人數:</span>
+        <button onclick="decrease('visitors3')">-</button>
+        <span id="visitors3">0</span>
+        <button onclick="increase('visitors3')">+</button>
+    </div>
+    <div class="counter">
+        <span>Touch rate(碰):</span>
+        <button onclick="decrease('touch3')">-</button>
+        <span id="touch3">0</span>
+        <button onclick="increase('touch3')">+</button>
+    </div>
+    <div class="counter">
+        <span>Pick-up rate(取):</span>
+        <button onclick="decrease('take3')">-</button>
+        <span id="take3">0</span>
+        <button onclick="increase('take3')">+</button>
+    </div>
+    <div class="counter">
+        <span>拿了商品後有拿推車:</span>
+        <button onclick="decrease('cart3')">-</button>
+        <span id="cart3">0</span>
+        <button onclick="increase('cart3')">+</button>
+    </div>
+</div>
+
+        <!-- 位置4 -->
+        <div class="section">
+            <h3>2F Transition area</h3>
+            <div class="counter">
+                <span>紀錄時間:</span>
+                <input type="time" id="time4">
+            </div>
+            <div class="counter">
+                <span>來訪人數:</span>
+                <button onclick="decrease('visitors4')">-</button>
+                <span id="visitors4">0</span>
+                <button onclick="increase('visitors4')">+</button>
+            </div>
+            <div class="counter">
+                <span>Touch rate(碰):</span>
+                <button onclick="decrease('touch4')">-</button>
+                <span id="touch4">0</span>
+                <button onclick="increase('touch4')">+</button>
+            </div>
+            <div class="counter">
+                <span>Pick-up rate(取):</span>
+                <button onclick="decrease('take4')">-</button>
+                <span id="take4">0</span>
+                <button onclick="increase('take4')">+</button>
+            </div>
+        </div>
+
+        <!-- 位置5 -->
+        <div class="section">
+            <h3>1F Checkout area</h3>
+            <div class="counter">
+                <span>紀錄時間:</span>
+                <input type="time" id="time5">
+            </div>
+            <div class="counter">
+                <span>來訪人數:</span>
+                <button onclick="decrease('visitors5')">-</button>
+                <span id="visitors5">0</span>
+                <button onclick="increase('visitors5')">+</button>
+            </div>
+            <div class="counter">
+                <span>Touch rate(碰):</span>
+                <button onclick="decrease('touch5')">-</button>
+                <span id="touch5">0</span>
+                <button onclick="increase('touch5')">+</button>
+            </div>
+            <div class="counter">
+                <span>Pick-up rate(取):</span>
+                <button onclick="decrease('take5')">-</button>
+                <span id="take5">0</span>
+                <button onclick="increase('take5')">+</button>
+            </div>
+        </div>
+
+        <!-- 匯出按鈕 -->
+        <button class="export-btn" onclick="exportToExcel()">匯出成 Excel</button>
+    </div>
+
+    <script>
+// 加減按鈕的功能
+function increase(id) {
+    let element = document.getElementById(id);
+    element.textContent = parseInt(element.textContent) + 1;
+    updateDirectionTotal();  // 更新動向加總
+}
+
+function decrease(id) {
+    let element = document.getElementById(id);
+    if (parseInt(element.textContent) > 0) {
+        element.textContent = parseInt(element.textContent) - 1;
+        updateDirectionTotal();  // 更新動向加總
+    }
+}
+
+// 更新動向加總
+function updateDirectionTotal() {
+    let left = parseInt(document.getElementById('directionLeft').textContent) || 0;
+    let right = parseInt(document.getElementById('directionRight').textContent) || 0;
+    document.getElementById('directionTotal').textContent = left + right;
+}
+
+// 初始化日期與頁面
+setCurrentDate();
+
+// 設定當前日期、星期及對應週數
+function getWeekNumber(d) {
+    var date = new Date(d.getFullYear(), d.getMonth(), d.getDate());
+    var dayNum = date.getDay() || 7; // Get current day, treating Sunday as 7
+    date.setDate(date.getDate() + 4 - dayNum); // Move to nearest Thursday
+    var yearStart = new Date(date.getFullYear(), 0, 1); // Start of year
+    var weekNum = Math.ceil((((date - yearStart) / 86400000) + 1) / 7); // Calculate week number
+    return weekNum;
+}
+
+function setCurrentDate() {
+    const now = new Date();
+    const options = { year: 'numeric', month: '2-digit', day: '2-digit' };
+    const formattedDate = now.toLocaleDateString('zh-TW', options);
+    const daysOfWeek = ['日', '一', '二', '三', '四', '五', '六'];
+    const weekNumber = getWeekNumber(now);
+
+    document.getElementById('currentDate').textContent = formattedDate;
+    document.getElementById('currentDay').textContent = daysOfWeek[now.getDay()];
+    document.getElementById('currentWeek').textContent = weekNumber;
+}
+
+setCurrentDate();
+
+
+        // 匯出到 Excel
+        function exportToExcel() {
+    let wb = XLSX.utils.book_new();
+
+    // 取得當前日期、星期、週數
+    let date = document.getElementById('currentDate').textContent;
+    let day = document.getElementById('currentDay').textContent;
+    let week = document.getElementById('currentWeek').textContent;
+
+    // 添加日期資訊到Excel
+    let ws_data = [
+        ['日期', date],
+        ['星期', day],
+        ['週數', week],
+        [],  // 空行分隔
+        ['位置', '紀錄時間', '來訪人數', 'Touch rate', 'Pick-up rate', '客人動向 (左)', '客人動向 (右)', '動向加總', '拿黃袋', '進入展示間', '拿推車'],
+        ['4F Launch area', document.getElementById('time1').value, document.getElementById('visitors1').textContent, document.getElementById('touch1').textContent, document.getElementById('take1').textContent],
+        ['4F OTW', document.getElementById('time2').value, 'N/A', document.getElementById('touch2').textContent, document.getElementById('take2').textContent, document.getElementById('directionLeft').textContent, document.getElementById('directionRight').textContent, document.getElementById('directionTotal').textContent, document.getElementById('yellowBag2').textContent, document.getElementById('showroom2').textContent],
+        ['3F OTW', document.getElementById('time3').value, document.getElementById('visitors3').textContent, document.getElementById('touch3').textContent, document.getElementById('take3').textContent, '', '', '', '', '', document.getElementById('cart3').textContent],
+        ['2F Transition area', document.getElementById('time4').value, document.getElementById('visitors4').textContent, document.getElementById('touch4').textContent, document.getElementById('take4').textContent],
+        ['1F Checkout area', document.getElementById('time5').value, document.getElementById('visitors5').textContent, document.getElementById('touch5').textContent, document.getElementById('take5').textContent]
+    ];
+
+    let ws = XLSX.utils.aoa_to_sheet(ws_data);
+    XLSX.utils.book_append_sheet(wb, ws, '記錄');
+
+    let name = document.getElementById('filledBy').value || '未填寫';
+    let currentDate = new Date().toLocaleDateString('zh-TW', {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit'
+    });
+
+    XLSX.writeFile(wb, `${name}_記錄_${currentDate}.xlsx`);
+}
+
+    </script>
+</body>
+</html>
